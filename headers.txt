@@ -1,0 +1,33 @@
+
+Connection: keep-alive
+Referer: http://127.0.0.1:8080/
+Sec-Fetch-Dest: script
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Site: cross-site
+Cache-Control: max-age=0
+TE: trailers
+
+
+
+Sec-Fetch-Dest: script
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Site: cross-site
+Referer: http://127.0.0.1:8080/
+Connection: keep-alive
+Cache-Control: max-age=0
+TE: trailers
+
+GET /jquery-3.6.0.min.js HTTP/2
+Host: code.jquery.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+Referer: http://127.0.0.1:8080/
+Sec-Fetch-Dest: script
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Site: cross-site
+Pragma: no-cache
+Cache-Control: no-cache
+TE: trailers
