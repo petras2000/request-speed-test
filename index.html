@@ -3,95 +3,42 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Firefox Performance Test</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-
+    <title>Bugzilla SW Issue</title>
 </head>
 <body>
-<div class="container">
-    <h1>Welcome to Firefox performance test.</h1>
-
-    <button type="button" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#modalStats">Get network stats</button>
-
-    <hr/>
-
-    <section class="mt-4">
-        <img src="https://via.placeholder.com/100x100"/>
-        <img src="https://via.placeholder.com/125x125"/>
-        <img src="https://via.placeholder.com/150x150"/>
-        <img src="https://via.placeholder.com/175x175"/>
-        <img src="https://via.placeholder.com/200x200"/>
-        <img src="https://via.placeholder.com/500x500"/>
-    </section>
-</div>
-
-<div class="modal" id="modalStats" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Test </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
-        crossorigin="anonymous"></script>
 
 <script>
-  if ('serviceWorker' in navigator && location.href.indexOf("?sw=false") === -1) {
-    navigator.serviceWorker.register('./sw.js')
-      .then((reg) => {
-        // registration worked
-        console.log(`Registration succeeded. Scope is ${reg.scope}`);
-      }).catch((error) => {
-      // registration failed
-      console.log(`Registration failed with ${error}`);
-    });
+    if ('serviceWorker' in navigator) {
+        if (location.href.indexOf("?sw=false") !== -1) {
+            navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                for (let registration of registrations) {
+                    registration.unregister()
+                }
+                console.log(`Unregister succeeded.`);
+            })
+        } else {
+            navigator.serviceWorker.register('./sw.js')
+                .then((reg) => {
+                    // registration worked
+                    console.log(`Registration succeeded. Scope is ${reg.scope}`);
+                }).catch((error) => {
+                // registration failed
+                console.log(`Registration failed with ${error}`);
+            });
+        }
 
-    navigator.serviceWorker.ready.then(registration => {
-      registration.active.postMessage("onload");
-    });
-  }
+    }
 
-  var myModal = document.getElementById('modalStats')
-  myModal.addEventListener('shown.bs.modal', function () {
-    const imgResources = performance.getEntriesByType('resource')
-      .filter(entry => entry.initiatorType === 'img').sort((a, b) => b.duration - a.duration);
-
-    const scriptResources = performance.getEntriesByType('resource')
-      .filter(entry => entry.initiatorType === 'script').sort((a, b) => b.duration - a.duration);
-    document.querySelector('.modal-body').innerHTML = `
-        <h5>DOMContentLoaded: ${performance.getEntriesByType('navigation')[0].domContentLoadedEventStart} ms</h5>
-        <h5>Image Requests: ${imgResources.reduce(function (accumulator, currentValue) {
-          return accumulator + currentValue.duration;
-        }, 0) / imgResources.length} ms</h5>
-        ${imgResources.map(entry => `<div>${entry.name}: <strong>${entry.duration.toFixed()} ms</strong></div>`).join('')}
-
-        <h5>Script Requests: ${scriptResources.reduce(function (accumulator, currentValue) {
-      return accumulator + currentValue.duration;
-    }, 0) / scriptResources.length} ms</h5>
-        ${scriptResources.map(entry => `<div>${entry.name}: <strong>${entry.duration.toFixed()} ms</strong></div>`).join('')}
-    `;
-  })
+    document.addEventListener('DOMContentLoaded', () => {
+        document.body.innerHTML = `
+        DOMContentLoaded ${(performance.getEntriesByType('navigation')[0].domContentLoadedEventStart).toFixed(3)}ms<br/>
+        ${performance.getEntriesByType('resource').filter(x => x.initiatorType === 'script').map(x => {
+            return `${x.name} ${(x.duration).toFixed(3)}ms<br/>`
+        }).join('')}
+            `
+    })
 </script>
-<!--<script src="index.js?v=2"></script>-->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://dev.visualwebsiteoptimizer.com/deploy/js_visitor_settings.php"></script>
-<script src="https://dev.visualwebsiteoptimizer.com/7.0/vis_opt-9d6ac57dbcbba3321dd904e6ee78b647.js"></script>
-<script src="https://api.dmp.y-track.com/YT-000068-1/v1/visitors?fields=all&fpc=1"></script>
-<!--<script src="https://dev.visualwebsiteoptimizer.com/7.0/vis_opt-9d6ac57dbcbba3321dd904e6ee78b647.js"></script>-->
-<script src="https://ultimate-fairy-77.app.baqend.com/v1/code/test"></script>
-<script src="http://ultimate-fairy-77.app.baqend.com/evil.js"></script>
+<script src="https://gist.githubusercontent.com/petras2000/2947a185756a5363482e3bcf086ac739/raw/dc6d83132eb4845c4a2b82d678bfa1c02e5230e0/js_visitor_settings.php"></script>
 </body>
 </html>
